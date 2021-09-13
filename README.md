@@ -1,5 +1,5 @@
 # Markovial Turk API
-#### A small Marcov chain Monte Carlo text generator.
+#### A Marcov chain Monte Carlo text generation API.
 
 ## Project Links
 
