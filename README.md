@@ -1,4 +1,4 @@
-# Marcovia
+# Markovial Turk API
 #### A small Marcov chain Monte Carlo text generator.
 
 ## Project Links
