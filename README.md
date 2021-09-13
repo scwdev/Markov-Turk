@@ -7,8 +7,7 @@
 - [deployment link](url)
 
 ## Project Description
-An API that accepts strings as input and returns generated text based on an MCMC algorithm, allowing the user to specifiy seperators, n-grams, and length of response. 
-Along a seperate route, a demo of the API which uses as data the names of every Star Wars character and tries to generate new ones, which the user can accept or reject through a Tindr-like interface.
+An API that accepts strings as input and converts them into a {state: [...steps]} probability matrix. The user can then take this matrix and use it to generate semi-random strings based on their initial data.
 
 ### CRUD Routes
 
@@ -62,14 +61,14 @@ saved_output:
  - matrix_reference: String (required)
  - generated: Array of Strings (max length 10)
 
-### Time/Priority Table
+### Time/Component Table
 
 #### MVP
 | Component | Estimated Time |
 | --- | :---: |
 | Flask research | ?? |
 | Models | 2 hrs |
-| AuthN | 3 hrs |
+| AuthZ | 3 hrs |
 | Base_data routes | 2 hr |
 | n-gram algo | 2 hr |
 | Matrix routes | 1 hr |
