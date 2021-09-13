@@ -3,7 +3,7 @@
 
 ## Project Links
 
-- [github repo link](url)
+- [frontend repo link](url)
 - [deployment link](url)
 
 ## Project Description
