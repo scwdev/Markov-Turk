@@ -1,4 +1,4 @@
-# Markovial Turk API
+# Markovical Turk API
 #### A Marcov chain Monte Carlo text generation API.
 
 ## Project Links
@@ -8,6 +8,9 @@
 
 ## Project Description
 An API that accepts strings as input and converts them into a {state: [...steps]} probability matrix. The user can then take this matrix and use it to generate semi-random strings based on their initial data.
+
+### Tech:
+Flask, SQLAlechemy, python-dotenv
 
 ### CRUD Routes
 
@@ -41,14 +44,12 @@ login/auth:
  - email: String (required, unique)
  - api-key: String (required)
 
-base_data:
- - api-key: String (required)
+data_sample:
  - title: String (required, unique)
  - initial_data: Array of Strings (required)
  - added_data: Array of Strings
 
 probability_matrix:
- - api-key: String (required)
  - base_data_reference: String (required)
  - matrix_title: String (required)
  - seperator: String
@@ -56,13 +57,11 @@ probability_matrix:
  - matrix: dictionary (required)
 
 saved_output: 
- - api-key: String (required)
  - base_data_reference: String (required)
  - matrix_reference: String (required)
  - generated: Array of Strings (max length 10)
 
 ### Time/Component Table
-
 #### MVP
 | Component | Estimated Time |
 | --- | :---: |
