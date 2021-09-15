@@ -11,9 +11,15 @@ db = SQLAlchemy(app)
 
 migrate = Migrate(app,db)
 
-from views.user import user
+from controllers.user import user_bp
+from controllers.sample import sample_bp
+from controllers.matrix import matrix_bp
+from controllers.output import output_bp
 
-app.register_blueprint(user)
+app.register_blueprint(user_bp)
+app.register_blueprint(sample_bp)
+app.register_blueprint(matrix_bp)
+app.register_blueprint(output_bp)
 
 
 # class Test(db.Model):

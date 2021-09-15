@@ -26,17 +26,17 @@ Flask, SQLAlechemy, python-dotenv
 | /data/:key/:id | put | update entry |
 | /data/:key/:id | delete | delete entry |
 | --- | :---: | :---: |
-| /matrix/:key/:ref | get | read all matrices (title & id) associated with reference |
-| /matrix/:key/:ref/new | post | generate new reference |
-| /matrix/:key/:ref/:id | show | read individual probability matrix entry |
-| /matrix/:key/:ref/:id | delete | delete matrix |
+| /matrix/:key | get | read all matrices (title & id) associated with reference |
+| /matrix/:key | post | generate new reference |
+| /matrix/:key/:id | show | read individual probability matrix entry |
+| /matrix/:key/:id | delete | delete matrix |
 | --- | :---: | :---: |
 | /generate/:length | get | read MCMC output with charcount = :length |
 | --- | :---: | :---: |
-| /saved/:key | get | read title & id for all saved /generate objects |
-| /saved/:key | put | save new object |
-| /saved/:key/:id | show | read saved object |
-| /saved/:key/:id | delete | delete saved object |
+| /output/:key | get | read title & id for all output /generate objects |
+| /output/:key | put | save new object |
+| /output/:key/:id | show | read output object |
+| /output/:key/:id | delete | delete output object |
 
 ### Models:
 
