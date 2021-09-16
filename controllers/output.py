@@ -3,9 +3,9 @@ from app import db
 
 from models.output import Output
 from models.matrix import Matrix
-from controllers.utilities import key_check
+from controllers.utilities import key_check, text_generator
 
-output_bp = Blueprint('output', __name__)
+output_bp = Blueprint('output', __name__, url_prefix='/<api_key>')
 
 @output_bp.url_value_preprocessor
 def initial_key_check(endpoints, values):
@@ -28,7 +28,7 @@ def output_serializer(output):
 
 @output_bp.route('/output', methods=["GET"])
 def index_outputs():
-    return jsonify([*map(output_serializer, Output.query.filter_by(user_id=g.user.id))])
+    return jsonify([*map(output_serializer, Output.query.all())])
 
 @output_bp.route('/matrix/<matrix_id>/output', methods=["POST"])
 def create_output(matrix_id):
@@ -39,11 +39,13 @@ def create_output(matrix_id):
     output = Output(
         user_id = g.user.id,
         matrix_id = matrix_id,
-        sample_title = data['sample_title'],
-        generated = some_fucntion(matrix.matrix)
+        output_title = data['output_title'],
+        generated = text_generator(matrix.matrix, "word", 100)
     )
+    db.session.add(output)
+    db.session.commit()
 
-    return jsonify([*map(output_serializer, Output.query.filter_by(user_id=g.user.id))])
+    return jsonify(output_serializer(output))
 
 @output_bp.route('/output/<id>', methods=["GET, PUT, DELETE"])
 def single_output(api_key, id):

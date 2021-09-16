@@ -41,8 +41,11 @@ def create_matrix(sample_id):
         sample_id = sample.id,
         user_id = g.user.id,
         matrix_title = data["matrix_title"],
-        matrix = n_gram_er(sample.training_data, data["n"], data["gram"])
+        matrix = n_gram_er(sample.training_data(), data["n"], data["gram"])
     )
+    # print("\n-----\n")
+    # print(sample.training_data())
+    # print("\n-----\n")
     db.session.add(matrix)
     db.session.commit()
 

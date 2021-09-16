@@ -20,35 +20,27 @@ def n_gram_er(training_data, n:int=1, gram:str='word'):
             p_matrix[n_gram].append(gram_list[i+n])
     return p_matrix
 
-def text_generator(p_matrix, n:int, gram:str, finished_length:int, first_gram:str=None):
-    if first_gram in p_matrix.keys():
-        chain = first_gram
+def text_generator(p_matrix:dict, gram:str, finished_length:int, first_n_gram:str=None):
+    ## check if starting point is assigned
+    if first_n_gram in p_matrix.keys():
+        chain = first_n_gram
     ## TODO: error catch for 'first_gram' not in matrix keys
     else:
         chain = random.choice(list(p_matrix.keys()))
-    g.last_gram = chain
+    ## define initial state
+    last_gram = chain
     while len(chain) < finished_length:
-        g.next_gram = random.choice(p_matrix[g.last_gram])
-        chain = chain + g.next_gram
+        ## define next step from current Markov chain state
+        next_gram = random.choice(p_matrix[last_gram])
+        ## Add step to output chain (with whitespace depending)
+        if gram == "word":
+            chain += " " + next_gram
+        else:
+            chain += next_gram
+        ## progress current state
+        last_gram = next_gram
 
-
-        pass
-
-    pass
-
-    # if gram_type == "char":
-    #     while len(output) <= length:
-    #         next_letter = random.choice(dictionary[output[-(len(start)):]])
-    #         output += next_letter
-
-    # if gram_type == "word":
-    #     while len(output) <= length:
-    #         last_gram = output.split(" ")[-1]
-    #         next_gram = random.choice(dictionary[last_gram])
-    #         output += " " + next_gram
-
-    # return(output)
-
+    return chain
 
 
 def mini_sample_serializer(sample):
