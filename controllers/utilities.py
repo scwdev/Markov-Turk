@@ -18,3 +18,18 @@ def n_gram_er(training_data, n:int=1, gram:str='word'):
             p_matrix[n_gram].append(gram_list[i+n])
     return p_matrix
 
+def mini_sample_serializer(sample):
+    return {
+        'sample_id': sample.id,
+        'sample_title': sample.sample_title
+    }
+def mini_matrix_serializer(matrix):
+    return {
+        'matrix_id': matrix.id,
+        'matrix_title': matrix.matrix_title
+    }
+def mini_output_serializer(output):
+    return {
+        'output_id': output.id,
+        'output_title': output.output_title
+    }

@@ -2,8 +2,7 @@ from flask import jsonify, request, json, Blueprint, g
 from app import db
 
 from models.sample import Sample
-from controllers.user import matrix_serializer
-from controllers.utilities import key_check
+from controllers.utilities import key_check, mini_matrix_serializer
 
 sample_bp = Blueprint('sample', __name__, url_prefix='/<api_key>')
 
@@ -21,13 +20,13 @@ def sample_serializer(sample):
         'sample_title': sample.sample_title,
         'initial_data': sample.initial_data,
         'added_data': sample.added_data,
-        'matrices': [*map(matrix_serializer, sample.matrices)],
+        'matrices': [*map(mini_matrix_serializer, sample.matrices)],
         'created': sample.created,
         'updated': sample.updated
     }
 
 @sample_bp.route('/sample', methods=['GET'])
-def get_post_samples():
+def index_samples():
     return jsonify([*map(sample_serializer, Sample.query.filter_by(user_id=g.user.id).all())])
 
 @sample_bp.route('/sample', methods=['POST'])

@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request, json, Blueprint
 from app import db
 
 from models.user import User
-from controllers.utilities import key_check
+from controllers.utilities import key_check, mini_matrix_serializer, mini_output_serializer, mini_sample_serializer
 
 user_bp = Blueprint('user', __name__)
 
@@ -13,30 +13,14 @@ def user_serializer(user):
         'id': user.id,
         'email': user.email,
         'api_key': user.api_key,
-        'samples': [*map(sample_serializer, user.samples)],
-        'matrices': [*map(matrix_serializer, user.matrices)],
-        'outputs': [*map(output_serializer, user.outputs)],
+        'samples': [*map(mini_sample_serializer, user.samples)],
+        'matrices': [*map(mini_matrix_serializer, user.matrices)],
+        'outputs': [*map(mini_output_serializer, user.outputs)],
         'created': user.created,
         'updated': user.updated
     }
 
-def sample_serializer(sample):
-    return {
-        'sample_id': sample.id,
-        'sample_title': sample.sample_title
-    }
-def matrix_serializer(matrix):
-    return {
-        'matrix_id': matrix.id,
-        'matrix_title': matrix.matrix_title
-    }
-def output_serializer(output):
-    return {
-        'output_id': output.id,
-        'output_title': output.output_title
-    }
-
-## Temporary, remove before deploy.
+## TODO -- Temporary, remove before deploy.
 @user_bp.route('/keys', methods=['GET'])
 def index_users():
     user = User.query.get(1)
