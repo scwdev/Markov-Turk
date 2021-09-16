@@ -12,6 +12,7 @@ matrix_bp = Blueprint('matrix', __name__, url_prefix='/<api_key>')
 def initial_key_check(endpoints, values):
     api_key = values.pop('api_key')
     g.user = key_check(api_key)
+    print(g.user)
     if g.user == None:
         return jsonify({'status': 401, 'message': 'No such key.'})
 
