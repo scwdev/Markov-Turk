@@ -1,3 +1,5 @@
+from itertools import repeat
+
 from flask import jsonify, request, json, Blueprint, g
 from app import db
 
@@ -7,11 +9,14 @@ from controllers.utilities import key_check, mini_matrix_serializer
 sample_bp = Blueprint('sample', __name__, url_prefix='/<api_key>')
 
 @sample_bp.url_value_preprocessor
-def print_endpoints(endpoints, values):
+def handle_key(endpoints, values):
     api_key = values.pop('api_key')
     g.user = key_check(api_key)
+
+@sample_bp.before_request
+def check_key():
     if g.user == None:
-        return jsonify({'status': '401', 'message': 'API is incorrect or does not exist.'})
+        return jsonify({'status': 401, 'message': 'No such key.'})
 
 def sample_serializer(sample):
     return {
@@ -20,7 +25,7 @@ def sample_serializer(sample):
         'sample_title': sample.sample_title,
         'initial_data': sample.initial_data,
         'added_data': sample.added_data,
-        'matrices': [*map(mini_matrix_serializer, sample.matrices)],
+        'matrices': [*map(mini_matrix_serializer, sample.matrices, repeat(g.user))],
         'created': sample.created,
         'updated': sample.updated
     }

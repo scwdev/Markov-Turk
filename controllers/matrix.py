@@ -1,3 +1,5 @@
+from itertools import repeat
+
 from flask import jsonify, request, json, Blueprint, g
 from app import db
 
@@ -9,11 +11,12 @@ from controllers.utilities import key_check, n_gram_er, mini_output_serializer
 matrix_bp = Blueprint('matrix', __name__, url_prefix='/<api_key>')
 
 @matrix_bp.url_value_preprocessor
-def initial_key_check(endpoints, values):
+def handle_key(endpoints, values):
     api_key = values.pop('api_key')
     g.user = key_check(api_key)
-    new_var = g.user
-    print(new_var)
+
+@matrix_bp.before_request
+def check_key():
     if g.user == None:
         return jsonify({'status': 401, 'message': 'No such key.'})
 
@@ -24,7 +27,7 @@ def matrix_serializer(matrix):
         'sample_id': matrix.sample_id,
         'matrix_title': matrix.matrix_title,
         'matrix': matrix.matrix,
-        'outputs': [*map(mini_output_serializer, matrix.outputs)],
+        'outputs': [*map(mini_output_serializer, matrix.outputs, repeat(g.user))],
         'created': matrix.created,
         'updated': matrix.updated
     }
@@ -65,12 +68,11 @@ def update_matrix(matrix_id):
     
     return jsonify({"status": 200, "message": f"{matrix.matrix_title} updated"})
 
-@matrix_bp.route('/matrix/<matrix_id>', methods=["GET", "DELETE"])
-def single_matrix(matrix_id):
-    data = json.loads(request.data)
-    matrix = Matrix.query.get(matrix_id)
+@matrix_bp.route('/matrix/<id>', methods=["GET", "DELETE"])
+def single_matrix(id):
+    matrix = Matrix.query.get(id)
     if g.user.id != matrix.user_id:
-        return jsonify({"status": 400, "message": f'Matrix {matrix_id} does not exist or is not authorized for access by this key'})
+        return jsonify({"status": 400, "message": f'Matrix {id} does not exist or is not authorized for access by this key'})
     if request.method == 'GET':
         return jsonify(matrix_serializer(matrix))
     if request.method == 'DELETE':

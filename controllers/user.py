@@ -1,4 +1,5 @@
 import secrets
+from itertools import repeat
 
 from flask import Flask, jsonify, request, json, Blueprint
 from app import db
@@ -13,9 +14,9 @@ def user_serializer(user):
         'id': user.id,
         'email': user.email,
         'api_key': user.api_key,
-        'samples': [*map(mini_sample_serializer, user.samples)],
-        'matrices': [*map(mini_matrix_serializer, user.matrices)],
-        'outputs': [*map(mini_output_serializer, user.outputs)],
+        'samples': [*map((mini_sample_serializer), user.samples, repeat(user))],
+        'matrices': [*map(mini_matrix_serializer, user.matrices, repeat(user))],
+        'outputs': [*map(mini_output_serializer, user.outputs , repeat(user))],
         'created': user.created,
         'updated': user.updated
     }

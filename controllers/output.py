@@ -1,3 +1,5 @@
+from itertools import repeat
+
 from flask import jsonify, request, json, Blueprint, g
 from app import db
 
@@ -8,9 +10,12 @@ from controllers.utilities import key_check, text_generator
 output_bp = Blueprint('output', __name__, url_prefix='/<api_key>')
 
 @output_bp.url_value_preprocessor
-def initial_key_check(endpoints, values):
+def handle_key(endpoints, values):
     api_key = values.pop('api_key')
     g.user = key_check(api_key)
+
+@output_bp.before_request
+def check_key():
     if g.user == None:
         return jsonify({'status': 401, 'message': 'No such key.'})
 
@@ -47,7 +52,7 @@ def create_output(matrix_id):
 
     return jsonify(output_serializer(output))
 
-@output_bp.route('/output/<id>', methods=["GET, PUT, DELETE"])
-def single_output(api_key, id):
-    
-    pass
+@output_bp.route('/output/<id>', methods=["GET", "PUT", "DELETE"])
+def single_output(id):
+    id = id
+    return jsonify({'message': 'ding'})
