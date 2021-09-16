@@ -20,23 +20,23 @@ Flask, SQLAlechemy, python-dotenv
 | /key/new | post | create new key |
 | /key/delete | delete | delete existing key and all associated data |
 | --- | :---: | :---: |
-| /data/:key | get | read existing base_data titles and ids |
-| /data/:key | post | add new base_data entry |
-| /data/:key/:id | show | read individual base_data entry |
-| /data/:key/:id | put | update entry |
-| /data/:key/:id | delete | delete entry |
+| /:key/data | get | read existing base_data titles and ids |
+| /:key/data | post | add new base_data entry |
+| /:key/data/:id | show | read individual base_data entry |
+| /:key/data/:id | put | update entry |
+| /:key/data/:id | delete | delete entry |
 | --- | :---: | :---: |
-| /matrix/:key | get | read all matrices (title & id) associated with reference |
-| /matrix/:key | post | generate new reference |
-| /matrix/:key/:id | show | read individual probability matrix entry |
-| /matrix/:key/:id | delete | delete matrix |
+| /:key/matrix | get | read all matrices (title & id) associated with reference |
+| /:key/matrix | post | generate new reference |
+| /:key/matrix/:id | show | read individual probability matrix entry |
+| /:key/matrix/:id | delete | delete matrix |
 | --- | :---: | :---: |
 | /generate/:length | get | read MCMC output with charcount = :length |
 | --- | :---: | :---: |
-| /output/:key | get | read title & id for all output /generate objects |
-| /output/:key | put | save new object |
-| /output/:key/:id | show | read output object |
-| /output/:key/:id | delete | delete output object |
+| /:key/output | get | read title & id for all output /generate objects |
+| /:key/output | put | save new object |
+| /:key/output/:id | show | read output object |
+| /:key/output/:id | delete | delete output object |
 
 ### Models:
 

@@ -1,76 +1,68 @@
-from flask import jsonify, request, json, Blueprint
+from flask import jsonify, request, json, Blueprint, g
 from app import db
 
 from models.sample import Sample
+from controllers.user import matrix_serializer
 from controllers.utilities import key_check
 
-sample_bp = Blueprint('sample', __name__)
+sample_bp = Blueprint('sample', __name__, url_prefix='/<api_key>')
+
+@sample_bp.url_value_preprocessor
+def print_endpoints(endpoints, values):
+    api_key = values.pop('api_key')
+    g.user = key_check(api_key)
+    if g.user == None:
+        return jsonify({'status': '401', 'message': 'API is incorrect or does not exist.'})
 
 def sample_serializer(sample):
     return {
         'id': sample.id,
         'user_id': sample.user_id,
-        'data_title': sample.data_title,
-        'initial_data': json.loads(sample.initial_data),
-        # TODO needs an if statement for json.loads...
+        'sample_title': sample.sample_title,
+        'initial_data': sample.initial_data,
         'added_data': sample.added_data,
-        'matrices': sample.matrices,
+        'matrices': [*map(matrix_serializer, sample.matrices)],
         'created': sample.created,
         'updated': sample.updated
     }
 
 @sample_bp.route('/sample', methods=['GET'])
-def sample_test():
-    return '<h1> sample test </h1>'
+def get_post_samples():
+    return jsonify([*map(sample_serializer, Sample.query.filter_by(user_id=g.user.id).all())])
+
+@sample_bp.route('/sample', methods=['POST'])
+def create_sample():
+    data = json.loads(request.data)
+    sample = Sample(
+        user_id = g.user.id,
+        sample_title = data['sample_title']
+        )
+    sample.initial_data = data['initial_data']
+    sample.added_data = []
+    db.session.add(sample)
+    db.session.commit()
+    return jsonify({'status':'201', 'message': 'added new data successully'})
 
 
-@sample_bp.route('/data/<api_key>', methods=['GET'])
-def index_data(api_key):
-    user = key_check(api_key)
-    if user == None:
-        return jsonify({'status': '401', 'message': 'API is incorrect or does not exist.'})
-    else:
-        return jsonify([*map(sample_serializer, Sample.query.filter_by(user_id=user.id).all())])
-
-
-@sample_bp.route('/data/<api_key>', methods=['POST'])
-def create_sample(api_key):
-    user = key_check(api_key)
-    if user == None:
-        return jsonify({'status': '401', 'message': 'API is incorrect or does not exist.'})
-    else:
-        data = json.loads(request.data)
-        sample = Sample(
-            user_id = user.id,
-            data_title = data['data_title'],
-            initial_data = json.dumps(data['initial_data'])
-            )
-        db.session.add(sample)
-        db.session.commit()
-        return jsonify({'status':'201', 'message': 'added new data successully'})
-
-
-@sample_bp.route('/data/<api_key>/<id>', methods=['GET', 'PUT', 'DELETE'])
-def single_sample(api_key, id):
-    # test if api_key matches a user
-    user = key_check(api_key)
-    # query sample by primary_key number
+@sample_bp.route('/sample/<id>', methods=['GET', 'PUT', 'DELETE'])
+def single_sample(id):
     sample = Sample.query.get(id)
-    if user == None:
+    if sample.user_id != g.user.id:
         return jsonify({'status': '401', 'message': 'API is incorrect or does not exist.'})
+    elif sample == None:
+        return jsonify({'status': '400', 'message': 'no Sample at that id'})
     # Show route
     elif request.method == 'GET':
-        print(sample)
         return jsonify(sample_serializer(sample))
     # Update route
     elif request.method == 'PUT':
         data = json.loads(request.data)
-        sample.added_data = json.dumps(data['added_data'])
-        sample.data_title = data['data_title']
+        sample.added_data = data['added_data']
+        sample.sample_title = data['sample_title']
         db.session.commit()
-        # TODO needs return statement
+        return jsonify({"status": "204", "message": "Successfully updated"})
     # Destroy route
     elif request.method == 'DELETE':
         db.session.delete(sample)
         db.session.commit()
-        # TODO needs return statement
+        return jsonify({"status": "204", "message": "Successfully deleted"})
