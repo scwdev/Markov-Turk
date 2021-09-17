@@ -39,10 +39,10 @@ def create_sample():
     data = json.loads(request.data)
     sample = Sample(
         user_id = g.user.id,
-        sample_title = data['sample_title']
+        sample_title = data['sample_title'],
+        initial_data = data['initial_data'],
+        added_data = []
         )
-    sample.initial_data = data['initial_data']
-    sample.added_data = []
     db.session.add(sample)
     db.session.commit()
     return jsonify({'status':'201', 'message': 'added new data successully'})

@@ -17,11 +17,13 @@ from controllers.user import user_bp
 from controllers.sample import sample_bp
 from controllers.matrix import matrix_bp
 from controllers.output import output_bp
+from controllers.generator import generator_bp
 
 app.register_blueprint(user_bp)
 app.register_blueprint(sample_bp)
 app.register_blueprint(matrix_bp)
 app.register_blueprint(output_bp)
+app.register_blueprint(generator_bp)
 
 @app.route('/', methods=['GET'])
 def test():

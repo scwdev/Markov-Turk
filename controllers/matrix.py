@@ -26,6 +26,8 @@ def matrix_serializer(matrix):
         'id': matrix.id,
         'sample_id': matrix.sample_id,
         'matrix_title': matrix.matrix_title,
+        'n': matrix.n,
+        'gram': matrix.gram,
         'matrix': matrix.matrix,
         'outputs': [*map(mini_output_serializer, matrix.outputs, repeat(g.user))],
         'created': matrix.created,
@@ -34,7 +36,7 @@ def matrix_serializer(matrix):
 
 @matrix_bp.route('/matrix', methods=["GET"])
 def get_matrices():
-    return jsonify([*map(matrix_serializer, Matrix.query.filter_by(user_id=g.user.id).all())])
+    return jsonify([*map(matrix_serializer, Matrix.query.all())])
 
 @matrix_bp.route('/sample/<sample_id>/matrix', methods=["POST"])
 def create_matrix(sample_id):
@@ -46,6 +48,8 @@ def create_matrix(sample_id):
         sample_id = sample.id,
         user_id = g.user.id,
         matrix_title = data["matrix_title"],
+        n = data["n"],
+        gram = data["gram"],
         matrix = n_gram_er(sample.training_data(), data["n"], data["gram"])
     )
     db.session.add(matrix)
@@ -73,4 +77,6 @@ def single_matrix(id):
     if request.method == 'GET':
         return jsonify(matrix_serializer(matrix))
     if request.method == 'DELETE':
+        db.session.delete(matrix)
+        db.session.commit()
         return jsonify({"status": 200, "message": f'{matrix.matrix_title} and all its children have been deleted.'})
