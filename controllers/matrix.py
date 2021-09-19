@@ -42,7 +42,7 @@ def get_matrices():
 def create_matrix(sample_id):
     data = json.loads(request.data)
     sample = Sample.query.get(sample_id)
-    if g.user.id != sample.user_id:
+    if sample == None or g.user.id != sample.user_id:
         return jsonify({"status": 400, "message": f'Sample {sample_id} does not exist or is not authorized for access by this key'})
     matrix = Matrix(
         sample_id = sample.id,
