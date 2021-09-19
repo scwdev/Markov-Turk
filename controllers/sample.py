@@ -40,7 +40,7 @@ def create_sample():
     sample = Sample(
         user_id = g.user.id,
         sample_title = data['sample_title'],
-        initial_data = data['initial_data'],
+        initial_data = [string.lower() for string in data['initial_data']],
         added_data = []
         )
     db.session.add(sample)

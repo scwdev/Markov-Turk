@@ -5,7 +5,7 @@ from app import db
 
 from models.output import Output
 from models.matrix import Matrix
-from controllers.utilities import key_check, text_generator
+from controllers.utilities import key_check, text_generator, mini_output_serializer
 
 output_bp = Blueprint('output', __name__, url_prefix='/<api_key>')
 
@@ -26,14 +26,14 @@ def output_serializer(output):
         "user_id": output.user_id,
         "matrix_id": output.matrix_id,
         "output_title": output.output_title,
-        "generated": output.generated,
+        "text": output.generated,
         "created": output.created,
         "udpated": output.updated
     }
 
 @output_bp.route('/output', methods=["GET"])
 def index_outputs():
-    return jsonify([*map(output_serializer, Output.query.all())])
+    return jsonify([*map(mini_output_serializer, Output.query.all())])
 
 @output_bp.route('/matrix/<matrix_id>/output', methods=["POST"])
 def create_output(matrix_id):
@@ -45,7 +45,7 @@ def create_output(matrix_id):
         user_id = g.user.id,
         matrix_id = matrix_id,
         output_title = data['output_title'],
-        generated = text_generator(matrix.matrix, "word", 100)
+        generated = data['text']
     )
     db.session.add(output)
     db.session.commit()

@@ -22,12 +22,13 @@ def user_serializer(user):
     }
 
 ## TODO -- Temporary, remove before deploy.
+
 @user_bp.route('/keys', methods=['GET'])
 def index_users():
     user = User.query.get(1)
     return jsonify([*map(user_serializer, User.query.all())])
 
-@user_bp.route('/key/new', methods=['POST'])
+@user_bp.route('/new/user', methods=['POST'])
 def create_user():
     data = json.loads(request.data)
     user = User(email = data['email'], api_key=secrets.token_urlsafe(16))
@@ -35,7 +36,7 @@ def create_user():
     db.session.commit()
     return jsonify([*map(user_serializer, User.query.filter_by(email=data['email']))])
 
-@user_bp.route('/user/<api_key>', methods=['GET', 'PUT','DELETE'])
+@user_bp.route('/<api_key>/user', methods=['GET', 'PUT','DELETE'])
 def modify_user(api_key):
     user = key_check(api_key)
     if user == None:

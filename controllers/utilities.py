@@ -30,7 +30,9 @@ def n_gram_er(training_data, n:int=1, gram:str='word'):
 
 
 def text_generator(p_matrix:dict, gram:str, finished_length:int, first_n_gram:str=None):
+    print(p_matrix.keys())
     if first_n_gram in p_matrix.keys():
+        print('ding')
         chain = first_n_gram
     else:
         chain = random.choice(list(p_matrix.keys()))

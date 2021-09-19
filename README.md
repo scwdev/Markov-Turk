@@ -14,29 +14,33 @@ Flask, SQLAlechemy, python-dotenv
 
 ### CRUD Routes
 
-| Path | Route | Functionality |
-| --- | :---: | :---: |
-| /key | get | read existing key |
-| /key/new | post | create new key |
-| /key/delete | delete | delete existing key and all associated data |
-| --- | :---: | :---: |
-| /:key/data | get | read existing base_data titles and ids |
-| /:key/data | post | add new base_data entry |
-| /:key/data/:id | show | read individual base_data entry |
-| /:key/data/:id | put | update entry |
-| /:key/data/:id | delete | delete entry |
-| --- | :---: | :---: |
-| /:key/matrix | get | read all matrices (title & id) associated with reference |
-| /:key/matrix | post | generate new reference |
-| /:key/matrix/:id | show | read individual probability matrix entry |
-| /:key/matrix/:id | delete | delete matrix |
-| --- | :---: | :---: |
-| /generate/:length | get | read MCMC output with charcount = :length |
-| --- | :---: | :---: |
-| /:key/output | get | read title & id for all output /generate objects |
-| /:key/output | put | save new object |
-| /:key/output/:id | show | read output object |
-| /:key/output/:id | delete | delete output object |
+| Path | Route | Functionality | JSON | Queries |
+| --- | :---: | :---: | :---: | :---: |
+| /new/user      | POST | Create new user   | email |  |
+| /:api-key/user | GET    | See existing user  | | |
+| /:api-key/user | POST   | Edit existing user | email | |
+| /:api-key/user | DELETE | See existing user  | | |
+||||||
+| /:api-key/generate-text						      | POST | Create text without saving data | training_data, n, gram, length | |
+| /:api-key/generate-text/sample/:id/:n/:gram/:length | GET  | Create text from saved sample   | | |
+| /:api-key/generate-text/matrix/:id/:length          | GET  | Create text from save matrix    | | "start: (first word) |
+||||||
+| /:api-key/sample     | GET    | Index existing training data titles and ids | | |
+| /:api-key/sample     | POST   | Create new training data entry              | sample_title, initial_data | |
+| /:api-key/sample/:id | GET    | Show individual training data entry         | | |
+| /:api-key/sample/:id | PUT    | Update entry                                | sample_title, added_data | |
+| /:api-key/sample/:id | DELETE | Delete entry                                | | |
+||||||
+| /:api-key/matrix     | GET    | Index existing probability matrices titles and ids |                       | |
+| /:api-key/matrix     | POST   | Create new matrix entry                            | matrix_title, n, gram | |
+| /:api-key/matrix/:id | GET    | Show individual matrix entry                       |                       | |
+| /:api-key/matrix/:id | DELETE | Delete matrix                                      |                       | |
+||||||
+| /:api-key/output            | GET    | Index title & id saved output | | |
+| /:api-key/matrix/:id/output | POST   | Save new text | output_title, text | |
+| /:api-key/output/:id        | SHOW   | read output object | | |
+| /:api-key/output/:id        | PUT    | read output object | | |
+| /:api-key/output/:id        | DELETE | delete output object | | |
 
 ### Models:
 
