@@ -38,7 +38,7 @@ def index_samples():
 def create_sample():
     data = json.loads(request.data)
 
-    if isinstance(list, data['initial_data']) == False:
+    if isinstance(data['initial_data'], list) == False:
         return jsonify({"status":400, "message": "please format 'initial_data' as an array of strings."})
     if sum(map(len,data['initial_data'])) > 1000000:
         return jsonify({"status":400, "message": "please confine training data to 1 million characters."})
@@ -71,7 +71,7 @@ def single_sample(id):
     elif request.method == 'PUT':
         data = json.loads(request.data)
 
-        if isinstance(list, data['added_data']) == False:
+        if isinstance(data['added_data'], list) == False:
             return jsonify({"status":400, "message": "please format 'added_data' as an array of strings."})
         
         if sum(map(len,data['added_data'])) > 1000000:
