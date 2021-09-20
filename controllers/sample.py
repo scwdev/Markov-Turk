@@ -37,6 +37,12 @@ def index_samples():
 @sample_bp.route('/sample', methods=['POST'])
 def create_sample():
     data = json.loads(request.data)
+
+    if isinstance(list, data('initial_data')) == False:
+        return jsonify({"status":400, "message": "please format 'initial_data' as an array of strings."})
+    if sum(map(len,data['initial_data'])) > 1000000:
+        return jsonify({"status":400, "message": "please confine training data to 1 million characters."})
+
     sample = Sample(
         user_id = g.user.id,
         sample_title = data['sample_title'],
@@ -51,20 +57,31 @@ def create_sample():
 @sample_bp.route('/sample/<id>', methods=['GET', 'PUT', 'DELETE'])
 def single_sample(id):
     sample = Sample.query.get(id)
+    
     if sample.user_id != g.user.id:
         return jsonify({'status': '401', 'message': 'API is incorrect or does not exist.'})
     elif sample == None:
         return jsonify({'status': '400', 'message': 'no Sample at that id'})
+    
     # Show route
     elif request.method == 'GET':
         return jsonify(sample_serializer(sample))
+    
     # Update route
     elif request.method == 'PUT':
         data = json.loads(request.data)
+
+        if isinstance(list, data('added_data')) == False:
+            return jsonify({"status":400, "message": "please format 'added_data' as an array of strings."})
+        
+        if sum(map(len,data['added_data'])) > 1000000:
+            return jsonify({"status":400, "message": "please confine added data to 1 million characters"})
+
         sample.added_data = data['added_data']
         sample.sample_title = data['sample_title']
         db.session.commit()
         return jsonify({"status": "204", "message": "Successfully updated"})
+    
     # Destroy route
     elif request.method == 'DELETE':
         db.session.delete(sample)

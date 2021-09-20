@@ -26,7 +26,7 @@ def generate_text_from_json():
 
     training_data = data['training_data']
     if sum(map(len,training_data)) > 10000:
-        return jsonify({'status': 400, 'message': f'Training-data too long ({sum(map(len,training_data))} characters). Please limit to 10,000 characters.'})
+        return jsonify({'status': 400, 'message': f'Training-data too long. Please limit to 10,000 characters.'})
 
     length = data['length']
     if length > 10000:
