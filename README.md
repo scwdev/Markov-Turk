@@ -13,22 +13,22 @@ Flask, SQLAlechemy, flask-migrate
 
 | Path | Route | Functionality | JSON | Queries |
 | --- | :---: | :---: | :---: | :---: |
-| USER ROUTES |
+| *USER ROUTES* |
 | /new/user      | POST | Create new user   | email |  |
 | /:api-key/user | GET    | See existing user  | | |
 | /:api-key/user | PUT   | Edit existing user | email | |
 | /:api-key/user | DELETE | See existing user  | | |
-| GENERATING TEXT |
+| *GENERATING TEXT* |
 | /:api-key/generate-text						      | POST | Create text without saving data | training_data, n, gram, length | |
 | /:api-key/generate-text/sample/:id/:n/:gram/:length | GET  | Create text from saved sample   | | |
 | /:api-key/generate-text/matrix/:id/:length          | GET  | Create text from save matrix    | | start (first word) |
-| SAVING TRAINING DATA |
+| *TRAINING DATA* |
 | /:api-key/sample     | GET    | Index existing training data titles and ids | | |
 | /:api-key/sample     | POST   | Create new training data entry              | sample_title, initial_data | |
 | /:api-key/sample/:id | GET    | Show individual training data entry         | | |
 | /:api-key/sample/:id | PUT    | Update entry                                | sample_title, added_data | |
 | /:api-key/sample/:id | DELETE | Delete entry                                | | |
-| CREATING PROBABILITY MATRICES |
+| *PROBABILITY MATRICES* |
 | /:api-key/matrix                       | GET    | Index existing probability matrices titles and ids |                       | |
 | /:api-key/sample/:sample-id/matrix     | POST   | Create new matrix entry                            | matrix_title, n, gram | |
 | /:api-key/matrix/:id                   | GET    | Show individual matrix entry                       |                       | |
