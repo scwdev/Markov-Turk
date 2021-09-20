@@ -54,24 +54,22 @@ Flask, SQLAlechemy, flask-migrate
         ```
 
  - To create a new probability matrix from saved training data send a POST request to "/:api-key/sample/:sample-id/matrix" with the JSON body formatted as:
-        ```
-        {
-            "matrix_title": <string>,
-            "n": <integer>,
-            "gram": <string> // ("word" or "char")
-        }
-        ```
+    ```
+    {
+        "matrix_title": <string>,
+        "n": <integer>,
+        "gram": <string> // ("word" or "char")
+    }
+    ```
 
 #### Generating text:
- - You can generated text without saving anything in the database, however you do still need an API key. You can do so by sending a POST request to "/:api-key/generate-text" with a JSON body including:
-    ```
+ - You can generated text without saving anything in the database, however you do still need an API key. You can do so by sending a POST request to "/:api-key/generate-text" with a JSON body of:
     {
         "training_data": <array of strings>,
         "n": <integer>,
         "gram": <string>, // "word" or "char"
         "length": <integer> // desired return length in characters
     }
-    ```
 
 However, if you have data saved in the API you can generated text with a simple GET request.
  - To generate text from a sample use "/:api-key/generate-text/sample/:id/:n/:gram/:length".
