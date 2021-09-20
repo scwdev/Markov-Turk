@@ -28,21 +28,51 @@ Flask, SQLAlechemy, flask-migrate
 | /:api-key/sample/:id | PUT    | Update entry                                | sample_title, added_data | |
 | /:api-key/sample/:id | DELETE | Delete entry                                | | |
 ||||||
-| /:api-key/matrix     | GET    | Index existing probability matrices titles and ids |                       | |
-| /:api-key/matrix     | POST   | Create new matrix entry                            | matrix_title, n, gram | |
-| /:api-key/matrix/:id | GET    | Show individual matrix entry                       |                       | |
-| /:api-key/matrix/:id | DELETE | Delete matrix                                      |                       | |
-||||||
-| /:api-key/output            | GET    | Index title & id saved output | | |
-| /:api-key/matrix/:id/output | POST   | Save new text | output_title, text | |
-| /:api-key/output/:id        | SHOW   | read output object | | |
-| /:api-key/output/:id        | PUT    | read output object | | |
-| /:api-key/output/:id        | DELETE | delete output object | | |
+| /:api-key/matrix                       | GET    | Index existing probability matrices titles and ids |                       | |
+| /:api-key/sample/:sample-id/matrix     | POST   | Create new matrix entry                            | matrix_title, n, gram | |
+| /:api-key/matrix/:id                   | GET    | Show individual matrix entry                       |                       | |
+| /:api-key/matrix/:id                   | DELETE | Delete matrix                                      |                       | |
+
 
 ### Using the API:
 
 #### Requesting a new API Key:
-send a POST request to "/user/new" with an email address in the JSON body formatted as `{"email": <string>}`
+ - send a POST request to "/user/new" with an email address in the JSON body formatted as
+        ```
+        {
+            "email": <string>
+        }
+        ```
 
 #### Saving new data:
-To add training data, send a POST request to "/:api-key/sample/" with the JSON body formatted as `{"initial_data": <array of strings>, "sample_title": <string>}`
+ - To add training data, send a POST request to "/:api-key/sample/" with the JSON body formatted as. As of last update linebreaks are not preserved and capitalized letters are changed to lower-case. 
+        ```
+        {
+            "initial_data": <array of strings>,
+            "sample_title": <string>
+        }
+        ```
+
+ - To create a new probability matrix from saved training data send a POST request to "/:api-key/sample/:sample-id/matrix" with the JSON body formatted as:
+        ```
+        {
+            "matrix_title": <string>,
+            "n": <integer>,
+            "gram": <string> // ("word" or "char")
+        }
+        ```
+
+#### Generating text:
+ - You can generated text without saving anything in the database, however you do still need an API key. You can do so by sending a POST request to "/:api-key/generate-text" with a JSON body including:
+        ```
+        {
+            "training_data": <array of strings>,
+            "n": <integer>,
+            "gram": <string>, // "word" or "char"
+            "length": <integer> // desired return length in characters
+        }
+
+However, if you have data saved in the API you can generated text with a simple GET request.
+ - To generate text from a sample use "/:api-key/generate-text/sample/:id/:n/:gram/:length".
+ - The fastest request is to generated text from an existing matrix at "/:api-key/generate-text/matrix/:id/:length", as this doesn't require the server to build a new matrix for each request. In addition, this route takes "start" as a query, allowing you to specify a starting "n-gram", as long as it exists in the matrix.
+
