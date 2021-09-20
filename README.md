@@ -42,7 +42,7 @@ Flask, SQLAlechemy, flask-migrate
 ### Using the API:
 
 #### Requesting a new API Key:
-send a POST request to "/user/new" with an email address in the JSON body formatted as {"email": <string>}
+send a POST request to "/user/new" with an email address in the JSON body formatted as `{"email": <string>}`
 
 #### Saving new data:
-To add training data, send a POST request to "/:api-key/sample/" with the JSON body formatted as {"initial_data": <array of strings>, "sample_title": <string>}
+To add training data, send a POST request to "/:api-key/sample/" with the JSON body formatted as `{"initial_data": <array of strings>, "sample_title": <string>}`
