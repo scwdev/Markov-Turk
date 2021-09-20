@@ -1,18 +1,15 @@
 # Markovical Turk API
 #### A Marcov chain Monte Carlo text generation API.
 
-## Project Links
-
-- [frontend repo link](url)
-- [deployment link](url)
+- [Deployed here](https://markov-turk.herokuapp.com/)
 
 ## Project Description
 An API that accepts strings as input and converts them into a {state: [...steps]} probability matrix. The user can then take this matrix and use it to generate semi-random strings based on their initial data.
 
 ### Tech:
-Flask, SQLAlechemy, python-dotenv
+Flask, SQLAlechemy, flask-migrate
 
-### CRUD Routes
+### Routes
 
 | Path | Route | Functionality | JSON | Queries |
 | --- | :---: | :---: | :---: | :---: |
@@ -23,7 +20,7 @@ Flask, SQLAlechemy, python-dotenv
 ||||||
 | /:api-key/generate-text						      | POST | Create text without saving data | training_data, n, gram, length | |
 | /:api-key/generate-text/sample/:id/:n/:gram/:length | GET  | Create text from saved sample   | | |
-| /:api-key/generate-text/matrix/:id/:length          | GET  | Create text from save matrix    | | "start: (first word) |
+| /:api-key/generate-text/matrix/:id/:length          | GET  | Create text from save matrix    | | start (first word) |
 ||||||
 | /:api-key/sample     | GET    | Index existing training data titles and ids | | |
 | /:api-key/sample     | POST   | Create new training data entry              | sample_title, initial_data | |
@@ -42,48 +39,10 @@ Flask, SQLAlechemy, python-dotenv
 | /:api-key/output/:id        | PUT    | read output object | | |
 | /:api-key/output/:id        | DELETE | delete output object | | |
 
-### Models:
+### Using the API:
 
-login/auth:
- - email: String (required, unique)
- - api-key: String (required)
+#### Requesting a new API Key:
+send a POST request to "/user/new" with an email address in the JSON body formatted as {"email": <string>}
 
-data_sample:
- - title: String (required, unique)
- - initial_data: Array of Strings (required)
- - added_data: Array of Strings
-
-probability_matrix:
- - base_data_reference: String (required)
- - matrix_title: String (required)
- - seperator: String
- - n_gram: Number
- - matrix: dictionary (required)
-
-saved_output: 
- - base_data_reference: String (required)
- - matrix_reference: String (required)
- - generated: Array of Strings (max length 10)
-
-### Time/Component Table
-#### MVP
-| Component | Estimated Time |
-| --- | :---: |
-| Flask research | ?? |
-| Models | 2 hrs |
-| AuthZ | 3 hrs |
-| Base_data routes | 2 hr |
-| n-gram algo | 2 hr |
-| Matrix routes | 1 hr |
-| Generate algo | 2 hrs |
-| Generate route | 1 hr |
-| Output routes | 1 hr |
-| Deployment | 2 hrs |
-| --- | :---: |
-| Total | 16 hrs |
-
-#### Post-MVP
-| Component | Estimated Time |
-| --- | :---: |
-| API landing | 6 hrs |
-| Browser input page | 2 hrs |
+#### Saving new data:
+To add training data, send a POST request to "/:api-key/sample/" with the JSON body formatted as {"initial_data": <array of strings>, "sample_title": <string>}
