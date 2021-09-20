@@ -64,13 +64,14 @@ Flask, SQLAlechemy, flask-migrate
 
 #### Generating text:
  - You can generated text without saving anything in the database, however you do still need an API key. You can do so by sending a POST request to "/:api-key/generate-text" with a JSON body including:
-        ```
-        {
-            "training_data": <array of strings>,
-            "n": <integer>,
-            "gram": <string>, // "word" or "char"
-            "length": <integer> // desired return length in characters
-        }
+    ```
+    {
+        "training_data": <array of strings>,
+        "n": <integer>,
+        "gram": <string>, // "word" or "char"
+        "length": <integer> // desired return length in characters
+    }
+    ```
 
 However, if you have data saved in the API you can generated text with a simple GET request.
  - To generate text from a sample use "/:api-key/generate-text/sample/:id/:n/:gram/:length".
