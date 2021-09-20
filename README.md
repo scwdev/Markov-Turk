@@ -17,7 +17,7 @@ Flask, SQLAlechemy, flask-migrate
 | /:api-key/user | GET    | See existing user  | | |
 | /:api-key/user | PUT   | Edit existing user | email | |
 | /:api-key/user | DELETE | See existing user  | | |
-||||||
+||
 | /:api-key/generate-text						      | POST | Create text without saving data | training_data, n, gram, length | |
 | /:api-key/generate-text/sample/:id/:n/:gram/:length | GET  | Create text from saved sample   | | |
 | /:api-key/generate-text/matrix/:id/:length          | GET  | Create text from save matrix    | | start (first word) |
