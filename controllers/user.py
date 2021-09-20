@@ -1,13 +1,17 @@
+import os
 import secrets
 from itertools import repeat
 
 from flask import Flask, jsonify, request, json, Blueprint
-from app import db
+from dotenv import load_dotenv
 
+from app import db
 from models.user import User
 from controllers.utilities import key_check, mini_matrix_serializer, mini_output_serializer, mini_sample_serializer
 
 user_bp = Blueprint('user', __name__)
+
+load_dotenv()
 
 def user_serializer(user):
     return {
@@ -23,10 +27,11 @@ def user_serializer(user):
 
 ## TODO -- Temporary, remove before deploy.
 
-@user_bp.route('/keys', methods=['GET'])
-def index_users():
-    user = User.query.get(1)
-    return jsonify([*map(user_serializer, User.query.all())])
+@user_bp.route('/keys/<secret_key>', methods=['GET'])
+def index_users(secret_key):
+    if secret_key == os.environ.get('SEE_ALL_USERS_KEY'):
+        user = User.query.get(1)
+        return jsonify([*map(user_serializer, User.query.all())])
 
 @user_bp.route('/new/user', methods=['POST'])
 def create_user():
